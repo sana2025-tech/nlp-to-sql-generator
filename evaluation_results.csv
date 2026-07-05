@@ -1,0 +1,109 @@
+question,status,generated_sql
+Show me all customers from Chicago,PASS,SELECT * FROM customers WHERE city = 'Chicago';
+How many orders had late delivery?,PASS,SELECT COUNT(*) FROM orders WHERE delivery_status = 'Late delivery'
+List all customers from the Corporate segment,PASS,SELECT * FROM customers WHERE segment = 'Corporate'
+How many customers are there in the West region?,PASS,SELECT COUNT(*) FROM customers WHERE region = 'West'
+Show all orders shipped using Same Day shipping,PASS,SELECT * FROM orders WHERE shipping_type = 'Same Day';
+How many products are in the Furniture category?,PASS,"SELECT COUNT(p.product_id) 
+FROM products p 
+JOIN categories c ON p.category_id = c.category_id 
+WHERE c.category_name = 'Furniture'"
+How many orders were canceled?,FAIL,SELECT COUNT(*) FROM orders WHERE delivery_status = 'Order canceled'
+What is the total sales for each category?,PASS,"SELECT cat.category_name, SUM(oi.sales_per_order) AS total_sales 
+FROM order_items oi 
+JOIN products p ON oi.product_id = p.product_id 
+JOIN categories cat ON p.category_id = cat.category_id 
+GROUP BY cat.category_name;"
+What is the total profit for each region?,PASS,"SELECT c.region, SUM(oi.profit_per_order) AS total_profit
+FROM order_items oi
+JOIN orders o ON oi.order_id = o.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.region;"
+How many orders were placed by each customer segment?,PASS,"SELECT c.segment, COUNT(o.order_id) AS number_of_orders
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.segment;"
+What is the average discount given per category?,PASS,"SELECT cat.category_name, AVG(oi.order_item_discount) AS average_discount
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+JOIN categories cat ON p.category_id = cat.category_id
+GROUP BY cat.category_name;"
+How many orders were shipped using each shipping type?,PASS,"SELECT shipping_type, COUNT(*) AS number_of_orders 
+FROM orders 
+GROUP BY shipping_type;"
+What is the total quantity ordered for each category?,PASS,"SELECT cat.category_name, SUM(oi.order_quantity) AS total_quantity
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+JOIN categories cat ON p.category_id = cat.category_id
+GROUP BY cat.category_name;"
+How many orders had late delivery in each shipping type?,PASS,"SELECT shipping_type, COUNT(*) AS late_deliveries 
+FROM orders 
+WHERE delivery_status = 'Late delivery' 
+GROUP BY shipping_type;"
+What is the total profit for each customer segment?,PASS,"SELECT c.segment, SUM(oi.profit_per_order) AS total_profit
+FROM order_items oi
+JOIN orders o ON oi.order_id = o.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.segment"
+How many customers are there in each state?,PASS,"SELECT state, COUNT(customer_id) AS number_of_customers 
+FROM customers 
+GROUP BY state;"
+Which region has the highest profit?,PASS,"SELECT c.region, SUM(oi.profit_per_order) AS total_profit
+FROM order_items oi
+JOIN orders o ON oi.order_id = o.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.region
+ORDER BY total_profit DESC
+LIMIT 1;"
+Show me the top 5 products by quantity sold,PASS,"SELECT p.product_name, SUM(oi.order_quantity) AS total_quantity_sold
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+GROUP BY p.product_name
+ORDER BY total_quantity_sold DESC
+LIMIT 5;"
+List the top 5 customers by total profit,PASS,"SELECT c.customer_id, c.first_name, c.last_name, SUM(oi.profit_per_order) AS total_profit
+FROM order_items oi
+JOIN orders o ON oi.order_id = o.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.customer_id, c.first_name, c.last_name
+ORDER BY total_profit DESC
+LIMIT 5;"
+Which category generates the least total sales?,PASS,"SELECT cat.category_name, SUM(oi.sales_per_order) AS total_sales
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+JOIN categories cat ON p.category_id = cat.category_id
+GROUP BY cat.category_name
+ORDER BY total_sales ASC
+LIMIT 1;"
+What are the top 3 states by number of orders?,PASS,"SELECT c.state, COUNT(o.order_id) AS num_orders
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.state
+ORDER BY num_orders DESC
+LIMIT 3;"
+Which shipping type has the highest average real shipment days?,PASS,"SELECT shipping_type, AVG(days_for_shipment_real) AS average_real_shipment_days
+FROM orders
+GROUP BY shipping_type
+ORDER BY average_real_shipment_days DESC
+LIMIT 1;"
+Show me the top 5 products by total profit,PASS,"SELECT p.product_name, SUM(oi.profit_per_order) AS total_profit
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+GROUP BY p.product_name
+ORDER BY total_profit DESC
+LIMIT 5;"
+Which customer segment has the highest average sales per order?,PASS,"SELECT c.segment, AVG(oi.sales_per_order) AS average_sales
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+JOIN order_items oi ON o.order_id = oi.order_id
+GROUP BY c.segment
+ORDER BY average_sales DESC
+LIMIT 1;"
+What is the total number of orders per region for the Technology category?,PASS,"SELECT c.region, COUNT(DISTINCT o.order_id) AS total_orders
+FROM order_items oi
+JOIN orders o ON oi.order_id = o.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+JOIN products p ON oi.product_id = p.product_id
+JOIN categories cat ON p.category_id = cat.category_id
+WHERE cat.category_name = 'Technology'
+GROUP BY c.region"

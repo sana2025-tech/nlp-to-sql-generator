@@ -1,0 +1,37 @@
+Table: categories
+  - category_id (BIGINT)
+  - category_name (TEXT)
+
+Table: customers
+  - customer_id (TEXT)
+  - first_name (TEXT)
+  - last_name (TEXT)
+  - segment (TEXT)
+  - city (TEXT)
+  - state (TEXT)
+  - country (TEXT)
+  - region (TEXT)
+
+Table: order_items
+  - order_item_id (BIGINT)
+  - order_id (TEXT)
+  - product_id (BIGINT)
+  - order_item_discount (DOUBLE)
+  - sales_per_order (DOUBLE)
+  - order_quantity (BIGINT)
+  - profit_per_order (DOUBLE)
+
+Table: orders
+  - order_id (TEXT)
+  - customer_id (TEXT)
+  - order_date (TEXT)
+  - ship_date (TEXT)
+  - shipping_type (TEXT)
+  - delivery_status (TEXT)
+  - days_for_shipment_scheduled (BIGINT)
+  - days_for_shipment_real (BIGINT)
+
+Table: products
+  - product_id (BIGINT)
+  - product_name (TEXT)
+  - category_id (BIGINT)
